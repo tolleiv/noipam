@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "istanbul test jasmine-node -- --verbose --color --captureExceptions spec",
+    "lint": "jscs spec/*.js models/*.js routes/*.js"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -16,5 +18,14 @@
     "sequelize-cli": "^1.7.0",
     "serve-favicon": "~2.2.1",
     "sqlite3": "^3.0.8"
-  }
+  },
+  "devDependencies": {
+    "jasmine-node": ">= 0.0.1",
+    "zombie": "*",
+    "istanbul": "~0.2.9",
+    "coveralls": "~2.10.0",
+    "jscs": "*"
+  },
+  "author": "Tolleiv Nietsch <tolleiv.nietsch@aoe.com>",
+  "license": "MIT"
 }
