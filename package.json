@@ -22,6 +22,7 @@
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
     "zombie": "*",
+    "request": "*",
     "istanbul": "~0.2.9",
     "coveralls": "~2.10.0",
     "jscs": "*"
