@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "istanbul test jasmine-node -- --verbose --color --captureExceptions spec",
+    "test": "npm run lint && istanbul test jasmine-node -- --verbose --color --captureExceptions spec",
     "lint": "jscs spec/*.js models/*.js routes/*.js"
   },
   "dependencies": {

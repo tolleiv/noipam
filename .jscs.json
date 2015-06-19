@@ -42,8 +42,6 @@
 	"requireKeywordsOnNewLine": [],
 	"disallowKeywordsOnNewLine": ["else"],
 
-	"requireLineFeedAtFileEnd": true,
-
 	"disallowTrailingWhitespace": true,
 
 	"disallowTrailingComma": true,
