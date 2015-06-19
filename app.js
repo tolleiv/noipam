@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var ip = require('./routes/ip');
 
 var app = express();
 
@@ -22,8 +22,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+    var chkIPv4 = new RegExp('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$');
+    if (req.body.ip && !req.body.ip.match(chkIPv4)) {
+        var err = new Error('Invalid IPv4 address argument');
+        err.status = 400;
+        next(err);
+    }
+    next()
+});
+
 app.use('/', routes);
-app.use('/users', users);
+app.use('/ip', ip);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -31,6 +41,8 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
