@@ -21,6 +21,8 @@
   },
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
+    "bluebird": "*",
+    "supertest": "*",
     "zombie": "*",
     "request": "*",
     "istanbul": "~0.2.9",
