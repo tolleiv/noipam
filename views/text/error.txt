@@ -1,0 +1,6 @@
+Message: {{ message }}
+
+Status: {{ error.status }}
+
+Stack:
+{{ error.stack }}

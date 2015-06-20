@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Message</h2>
+<p>{{ message }}</p>
+<h2>Status</h2>
+<p>{{ error.status }}</p>
+
+<h2>Stack</h2>
+<pre>
+{{ error.stack }}
+</pre>
+{% endblock %}

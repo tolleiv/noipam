@@ -2,7 +2,7 @@ var app = require('../../app');
 var Bluebird = require('bluebird');
 var request = require('supertest');
 
-describe("the test suite API", function () {
+describe('the IP blocking API', function () {
     beforeEach(function (done) {
         var models = this.models = require('../../models/index');
         models.sequelize.sync().then(function (err) {
@@ -19,40 +19,41 @@ describe("the test suite API", function () {
         });
     });
 
-    it("can call the root page", function (done) {
+    it('can call the root page', function (done) {
         request(app).get('/').expect(200, done);
     });
 
-    it("can confirm ip usage", function (done) {
+    it('can confirm ip usage', function (done) {
         this.models.Address.create({value: '10.1.0.1'}).then(function () {
             request(app)
-                .get('/ip').send({ip: '10.1.0.1'})
+                .get('/ip').set('Accept', 'text/plain').send({ip: '10.1.0.1'})
+                .expect('Content-Type', /text\/plain/)
                 .expect(/^used$/)
                 .expect(200, done);
         });
     });
 
-    it("can confirm ip availability", function (done) {
+    it('can confirm ip availability', function (done) {
         request(app)
-            .get('/ip').send({ip: '10.1.0.1'})
+            .get('/ip').set('Accept', 'text/plain').send({ip: '10.1.0.1'})
             .expect(/^free/)
             .expect(404, done);
     });
 
-    it("can list all blocked ips", function (done) {
+    it('can list all blocked ips', function (done) {
         this.models.Address.bulkCreate([{value: '10.1.1.1'}, {value: '10.1.1.2'}]).then(function () {
             request(app)
-                .get('/ip/used')
+                .get('/ip/used').set('Accept', 'text/plain')
                 .expect(/10.1.1.1/)
                 .expect(/10.1.1.2/)
-                .expect('Content-Length', '17')
+                .expect('Content-Length', '20')
                 .expect(200, done);
         });
     });
 
-    it("can block additional ips", function (done) {
+    it('can block additional ips', function (done) {
         request(app)
-            .put('/ip').send({ip: '10.1.1.3'})
+            .put('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.3'})
             .expect(/^success$/)
             .expect(200, done);
     });
@@ -60,31 +61,31 @@ describe("the test suite API", function () {
     xit("can't block already blocked ips", function (done) {
         this.models.Address.create({value: '10.1.1.4'}).then(function () {
             request(app)
-                .put('/ip').send({ip: '10.1.1.4'})
+                .put('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.4'})
                 .expect(/^failure/)
                 .expect(500, done);
         });
     });
 
-    it("can drop blocked ips", function (done) {
+    it('can drop blocked ips', function (done) {
         this.models.Address.create({value: '10.1.1.5'}).then(function () {
             request(app)
-                .delete('/ip').send({ip: '10.1.1.5'})
+                .delete('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.5'})
                 .expect(/^success$/)
                 .expect(200, done);
         });
     });
 
-    it("can't drop non existing ips", function (done) {
+    it('can\'t drop non existing ips', function (done) {
         request(app)
-            .delete('/ip').send({ip: '10.1.1.6'})
+            .delete('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.6'})
             .expect(/^not found$/)
             .expect(404, done);
     });
 
-    it("will complain if ip argument is malforms", function (done) {
+    it('will complain if ip argument is malformed', function (done) {
         request(app)
-            .get('/ip').send({ip: '10..1.6'})
+            .get('/ip').set('Accept', 'text/plain').send({ip: '10..1.6'})
             .expect(/Invalid IPv4 address/)
             .expect(400, done);
     });

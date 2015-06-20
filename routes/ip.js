@@ -16,10 +16,7 @@ router.get('/', function (req, res) {
 
 router.get('/used', function (req, res) {
     models.Address.findAll().then(function (rows) {
-        var ips = rows.map(function (row) {
-            return row.value;
-        });
-        res.send(ips.join(('\n')))
+        res.render('ip_list', {rows: rows});
     });
 });
 

@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<table>
+    <thead><tr><th>IP</th><th>Comment</th></tr></thead>
+    <tbody>
+    {% for row in rows %}
+    <tr><td>{{ row.value }}</td><td>{{ row.comment }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
