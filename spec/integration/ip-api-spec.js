@@ -1,6 +1,7 @@
 var app = require('../../app');
 var Bluebird = require('bluebird');
 var request = require('supertest');
+var reject = require('../helper').reject_body
 
 describe('the IP blocking API', function () {
     beforeEach(function (done) {
@@ -51,6 +52,30 @@ describe('the IP blocking API', function () {
         });
     });
 
+    it('can list all blocked ips for a subnet', function (done) {
+        this.models.Address.bulkCreate([{value: '10.1.1.7'}, {value: '10.2.1.7'}, {value: '10.1.80.200'}]).then(function () {
+            request(app)
+                .get('/ip/used').send({net: '10.1.0.0/16'}).set('Accept', 'text/plain')
+                .expect(/10.1.1.7/)
+                .expect(/10.1.80.200/)
+                .expect(reject(/10.2.1.7/))
+                .expect(200, done);
+        });
+    });
+
+    it('can list all remaining ips for a subnet', function (done) {
+        this.models.Address.bulkCreate([{value: '10.3.1.1'}, {value: '10.3.1.2'}, {value: '10.3.1.4'},]).then(function () {
+            request(app)
+                .get('/ip/remaining').send({net: '10.3.1.0/29'}).set('Accept', 'text/plain')
+                .expect(/10.3.1.3/)
+                .expect(/10.3.1.5/)
+                .expect(reject(/10.3.1.0/))
+                .expect(reject(/10.3.1.1/))
+                .expect(reject(/10.3.1.9/))
+                .expect(200, done);
+        });
+    });
+
     it('can block additional ips', function (done) {
         request(app)
             .put('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.3'})
@@ -58,12 +83,12 @@ describe('the IP blocking API', function () {
             .expect(200, done);
     });
 
-    xit("can't block already blocked ips", function (done) {
+    it("can't block already blocked ips", function (done) {
         this.models.Address.create({value: '10.1.1.4'}).then(function () {
             request(app)
                 .put('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.4'})
-                .expect(/^failure/)
-                .expect(500, done);
+                .expect(/^used/)
+                .expect(200, done);
         });
     });
 
@@ -89,4 +114,6 @@ describe('the IP blocking API', function () {
             .expect(/Invalid IPv4 address/)
             .expect(400, done);
     });
+
+
 });

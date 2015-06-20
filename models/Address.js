@@ -1,5 +1,5 @@
 'use strict';
-var IpSubnetCalculator = require('ip-subnet-calculator');
+var ipCalculator = require('ip-subnet-calculator');
 
 module.exports = function (sequelize, DataTypes) {
     var Address = sequelize.define('Address', {
@@ -14,8 +14,15 @@ module.exports = function (sequelize, DataTypes) {
         }
     });
     Address.beforeCreate(function (address, options, fn) {
-        address.value_int = IpSubnetCalculator.toDecimal(address.value);
+        address.value_int = ipCalculator.toDecimal(address.value);
         fn(null, address)
     });
+    Address.beforeBulkCreate(function (addresses, options, fn) {
+        addresses = addresses.map(function (address) {
+            address.value_int = ipCalculator.toDecimal(address.value);
+            return address;
+        });
+        fn(null, addresses)
+    })
     return Address;
 };

@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-    if (req.accepts('text/html')) {
+    if (req.accepts('html')) {
         app.engine('html', swig.renderFile);
         app.set('view engine', 'html');
         app.set('views', path.join(__dirname, 'views/html'));
@@ -33,16 +33,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(function (req, res, next) {
-    var chkIPv4 = new RegExp('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$');
-    if (req.body.ip && !req.body.ip.match(chkIPv4)) {
-        var err = new Error('Invalid IPv4 address argument');
-        err.status = 400;
-        next(err);
-    } else {
-        next()
-    }
-});
+app.use(require('./middleware/ip').validate_ip);
+app.use(require('./middleware/ip').validate_net);
 
 app.use('/', routes);
 app.use('/ip', ip);
