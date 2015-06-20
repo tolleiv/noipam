@@ -26,9 +26,23 @@ function blockedWithinNet(net, cb) {
     }
     models.Address.findAll(filter).then(cb);
 }
+function remainingWithinNet(net, cb) {
+    blockedWithinNet(net, function (rows) {
+        rows = rows.map(function (row) {
+            return row.value_int;
+        });
+        var remaining = [];
+        for (var i = net.ipLow; i <= net.ipHigh; i++) {
+            var ip = ipCalculator.toString(i);
+            if (rows.indexOf(i) == -1 && !ip.match(/\.(0|255)$/)) {
+                remaining.push({value: ip, value_int: i, comment: ''})
+            }
+        }
+        cb(remaining);
+    });
+}
 
 router.get('/used', function (req, res) {
-
     var result = function (rows) {
         res.render('ip_list', {rows: rows});
     };
@@ -41,18 +55,18 @@ router.get('/used', function (req, res) {
 });
 
 router.get('/remaining', function (req, res) {
-    blockedWithinNet(req.body.net, function (rows) {
-        rows = rows.map(function (row) {
-            return row.value_int;
-        });
-        var remaining = [];
-        for (var i = req.body.net.ipLow; i <= req.body.net.ipHigh; i++) {
-            var ip = ipCalculator.toString(i);
-            if (rows.indexOf(i) == -1 && !ip.match(/\.(0|255)$/)) {
-                remaining.push({value: ip, value_int: i, comment: ''})
-            }
-        }
+    remainingWithinNet(req.body.net, function (remaining) {
         res.render('ip_list', {rows: remaining});
+    });
+});
+
+router.post('/next', function (req, res) {
+    remainingWithinNet(req.body.net, function (remaining) {
+        models.Address.create(remaining[0]).then(function () {
+            res.send(remaining[0].value);
+        }).error(function () {
+            res.send('failure');
+        });
     });
 });
 

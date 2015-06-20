@@ -47,7 +47,7 @@ describe('the IP blocking API', function () {
                 .get('/ip/used').set('Accept', 'text/plain')
                 .expect(/10.1.1.1/)
                 .expect(/10.1.1.2/)
-                .expect('Content-Length', '20')
+                .expect('Content-Length', '19')
                 .expect(200, done);
         });
     });
@@ -88,6 +88,15 @@ describe('the IP blocking API', function () {
             request(app)
                 .put('/ip').set('Accept', 'text/plain').send({ip: '10.1.1.4'})
                 .expect(/^used/)
+                .expect(200, done);
+        });
+    });
+
+    it('can block a remaining ip', function(done) {
+        this.models.Address.bulkCreate([{value: '10.4.1.1'}, {value: '10.4.1.2'}]).then(function () {
+            request(app)
+                .post('/ip/next').send({net: '10.4.1.0/29'}).set('Accept', 'text/plain')
+                .expect(/^10.4.1.3$/)
                 .expect(200, done);
         });
     });
