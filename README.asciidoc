@@ -1,0 +1,28 @@
+
+# IPv4 address reservation tool
+
+## Usage
+
+Check if IP is used
+
+    $ curl -X GET     -s http://service/ip/10.20.70.11
+    --> free | used
+
+Mark IP as used/unused
+
+    $ curl -X PUT     -s http://service/ip/10.20.70.11
+    $ curl -X DELETE  -s http://service/ip/10.20.70.11
+
+Get an available IP from a subnet
+
+    $ curl -X POST    -s http://service/net/next/10.20.70.0/24
+
+List the remaining or used IPs for a subnet
+
+    $ curl -X GET     -s http://service/net/remaining/10.20.70.0/24
+    $ curl -X GET     -s http://service/net/used/10.20.70.0/24
+
+## Why?
+
+When auto provisioning servers, DHCP isn't the right choice and manual association isn't nice either.
+Therefore this tool provides a service with a nice API to help automating provision processes.
