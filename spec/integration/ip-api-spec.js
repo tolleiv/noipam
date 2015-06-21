@@ -1,7 +1,6 @@
 var app = require('../../app');
 var Bluebird = require('bluebird');
 var request = require('supertest');
-var reject = require('../helper').reject_body;
 
 describe('the ip API', function () {
     beforeEach(function (done) {
