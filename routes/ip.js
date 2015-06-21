@@ -1,7 +1,7 @@
 var express = require('express');
 var models = require('../models');
 var router = express.Router();
-var check_ip_v4 = require('../middleware/ip').check_ip_v4;
+var check_ip_v4 = require('../lib/ip-validation').check_ip_v4;
 
 router.route('/:ip')
     .all(function (req, res, next) {

@@ -1,6 +1,6 @@
 var express = require('express');
 var models = require('../models');
-var validate_net = require('../middleware/ip').validate_net;
+var validate_net = require('../lib/ip-validation').validate_net;
 var blockedWithinNet = require('../lib/ip-blocking').blockedWithinNet;
 var remainingWithinNet = require('../lib/ip-blocking').remainingWithinNet;
 var router = express.Router();
