@@ -6,13 +6,13 @@ var cookieParser = require('cookie-parser');
 var swig = require('swig');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var ip = require('./routes/ip');
+var routes_idx = require('./routes/index');
+var routes_ip = require('./routes/ip');
+var routes_net = require('./routes/net');
 
 var app = express();
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -33,11 +33,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(require('./middleware/ip').validate_ip);
-app.use(require('./middleware/ip').validate_net);
+app.use('/', routes_idx);
+app.use('/ip', routes_ip);
+app.use('/net', routes_net);
 
-app.use('/', routes);
-app.use('/ip', ip);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
