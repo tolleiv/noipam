@@ -44,7 +44,8 @@ router.route('/:ip')
         }).then(function (address) {
             if (!address) {
                 models.Address.create({
-                    value: req.params.ip
+                    value: req.params.ip,
+                    comment: req.body.comment
                 }).then(function () {
                     res.send('success');
                 }).error(function () {

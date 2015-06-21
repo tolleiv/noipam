@@ -27,7 +27,7 @@ router.get('/used/:net/:suffix', validate_net, function (req, res) {
  * @apiSuccess {String} ips List of used IPs delimited by newline
  * */
 router.get('/used', function (req, res) {
-    models.Address.findAll().then(function (rows) {
+    models.Address.findAll({order:[['value_int', 'ASC']]}).then(function (rows) {
         res.render('ip_list', {rows: rows});
     });
 });
