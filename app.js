@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-    if (req.accepts('html')) {
+    if (req.query.pretty && req.query.pretty == 'html') {
         app.engine('html', swig.renderFile);
         app.set('view engine', 'html');
         app.set('views', path.join(__dirname, 'views/html'));

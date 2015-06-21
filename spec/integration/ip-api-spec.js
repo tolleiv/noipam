@@ -23,7 +23,7 @@ describe('the ip API', function () {
     it('can confirm ip usage', function (done) {
         this.models.Address.create({value: '10.1.0.1'}).then(function () {
             request(app)
-                .get('/ip/10.1.0.1').set('Accept', 'text/plain')
+                .get('/ip/10.1.0.1')
                 .expect('Content-Type', /text\/plain/)
                 .expect(/^used$/)
                 .expect(200, done);
@@ -32,14 +32,14 @@ describe('the ip API', function () {
 
     it('can confirm ip availability', function (done) {
         request(app)
-            .get('/ip/10.1.0.1').set('Accept', 'text/plain')
+            .get('/ip/10.1.0.1')
             .expect(/^free/)
             .expect(404, done);
     });
 
     it('can block additional ips', function (done) {
         request(app)
-            .put('/ip/10.1.1.3').set('Accept', 'text/plain')
+            .put('/ip/10.1.1.3')
             .expect(/^success$/)
             .expect(200, done);
     });
@@ -47,7 +47,7 @@ describe('the ip API', function () {
     it("can't block already blocked ips", function (done) {
         this.models.Address.create({value: '10.1.1.4'}).then(function () {
             request(app)
-                .put('/ip/10.1.1.4').set('Accept', 'text/plain')
+                .put('/ip/10.1.1.4')
                 .expect(/^used/)
                 .expect(200, done);
         });
@@ -56,7 +56,7 @@ describe('the ip API', function () {
     it('can drop blocked ips', function (done) {
         this.models.Address.create({value: '10.1.1.5'}).then(function () {
             request(app)
-                .delete('/ip/10.1.1.5').set('Accept', 'text/plain')
+                .delete('/ip/10.1.1.5')
                 .expect(/^success$/)
                 .expect(200, done);
         });
@@ -64,14 +64,14 @@ describe('the ip API', function () {
 
     it('can\'t drop non existing ips', function (done) {
         request(app)
-            .delete('/ip/10.1.1.6').set('Accept', 'text/plain')
+            .delete('/ip/10.1.1.6')
             .expect(/^not found$/)
             .expect(404, done);
     });
 
     it('will complain if ip argument is malformed', function (done) {
         request(app)
-            .get('/ip/10..1.6').set('Accept', 'text/plain')
+            .get('/ip/10..1.6')
             .expect(/invalid IPv4 argument/i)
             .expect(400, done);
     });

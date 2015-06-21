@@ -24,7 +24,7 @@ describe('the subnet API', function () {
     it('can list all blocked ips', function (done) {
         this.models.Address.bulkCreate([{value: '10.1.1.1'}, {value: '10.1.1.2'}]).then(function () {
             request(app)
-                .get('/net/used').set('Accept', 'text/plain')
+                .get('/net/used')
                 .expect(/10.1.1.1/)
                 .expect(/10.1.1.2/)
                 .expect('Content-Length', '19')
@@ -35,7 +35,7 @@ describe('the subnet API', function () {
     it('can list all blocked ips for a subnet', function (done) {
         this.models.Address.bulkCreate([{value: '10.1.1.7'}, {value: '10.2.1.7'}, {value: '10.1.80.200'}]).then(function () {
             request(app)
-                .get('/net/used/10.1.0.0/16').set('Accept', 'text/plain')
+                .get('/net/used/10.1.0.0/16')
                 .expect(/10.1.1.7/)
                 .expect(/10.1.80.200/)
                 .expect(reject(/10.2.1.7/))
@@ -46,7 +46,7 @@ describe('the subnet API', function () {
     it('can list all remaining ips for a subnet', function (done) {
         this.models.Address.bulkCreate([{value: '10.3.1.1'}, {value: '10.3.1.2'}, {value: '10.3.1.4'}]).then(function () {
             request(app)
-                .get('/net/remaining/10.3.1.0/29').set('Accept', 'text/plain')
+                .get('/net/remaining/10.3.1.0/29')
                 .expect(/10.3.1.3/)
                 .expect(/10.3.1.5/)
                 .expect(reject(/10.3.1.0/))
@@ -69,13 +69,13 @@ describe('the subnet API', function () {
                 },
                 function (cb) {
                     request(app)
-                        .post('/net/next/10.4.1.0/29').set('Accept', 'text/plain')
+                        .post('/net/next/10.4.1.0/29')
                         .expect(/^10.4.1.3$/)
                         .expect(200, cb);
                 },
                 function (cb) {
                     request(app)
-                        .post('/net/next/10.4.1.0/29').set('Accept', 'text/plain')
+                        .post('/net/next/10.4.1.0/29')
                         .expect(/^10.4.1.4$/)
                         .expect(200, cb);
                 }
@@ -98,7 +98,7 @@ describe('the subnet API', function () {
                 },
                 function (cb) {
                     request(app)
-                        .post('/net/next/10.5.1.0/30').set('Accept', 'text/plain')
+                        .post('/net/next/10.5.1.0/30')
                         .expect(/^nothing left$/)
                         .expect(500, cb);
                 }
@@ -110,14 +110,14 @@ describe('the subnet API', function () {
 
     it('will complain if net argument is malformed', function (done) {
         request(app)
-            .get('/net/used/10..1.6/24').set('Accept', 'text/plain')
+            .get('/net/used/10..1.6/24')
             .expect(/Invalid CIDR string/)
             .expect(400, done);
     });
 
     it('will complain if suffix argument is malformed', function (done) {
         request(app)
-            .get('/net/used/10.1.1.6/39').set('Accept', 'text/plain')
+            .get('/net/used/10.1.1.6/39')
             .expect(/Invalid CIDR string/)
             .expect(400, done);
     });
