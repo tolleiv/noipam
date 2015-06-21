@@ -1,7 +1,8 @@
 var app = require('../../app');
 var Bluebird = require('bluebird');
 var request = require('supertest');
-var reject = require('../helper').reject_body
+var reject = require('../helper').reject_body;
+var async = require('async');
 
 describe('the IP blocking API', function () {
     beforeEach(function (done) {
@@ -92,13 +93,56 @@ describe('the IP blocking API', function () {
         });
     });
 
-    it('can block a remaining ip', function(done) {
-        this.models.Address.bulkCreate([{value: '10.4.1.1'}, {value: '10.4.1.2'}]).then(function () {
-            request(app)
-                .post('/ip/next').send({net: '10.4.1.0/29'}).set('Accept', 'text/plain')
-                .expect(/^10.4.1.3$/)
-                .expect(200, done);
-        });
+    it('can block a remaining ip from a subnet', function (done) {
+        var models = this.models;
+        async.series([
+                function (cb) {
+                    models.Address
+                        .bulkCreate([{value: '10.4.1.1'}, {value: '10.4.1.2'}])
+                        .then(function (rows) {
+                            cb(null, rows);
+                        })
+                        .error(cb);
+                },
+                function (cb) {
+                    request(app)
+                        .post('/ip/next').send({net: '10.4.1.0/29'}).set('Accept', 'text/plain')
+                        .expect(/^10.4.1.3$/)
+                        .expect(200, cb);
+                },
+                function (cb) {
+                    request(app)
+                        .post('/ip/next').send({net: '10.4.1.0/29'}).set('Accept', 'text/plain')
+                        .expect(/^10.4.1.4$/)
+                        .expect(200, cb);
+                }
+            ],
+            function (err, results) {
+                done(err);
+            });
+    });
+
+    it("can't block if no ip is remaining in the subnet", function(done) {
+        var models = this.models;
+        async.series([
+                function (cb) {
+                    models.Address
+                        .bulkCreate([{value: '10.5.1.1'}, {value: '10.5.1.2'}])
+                        .then(function (rows) {
+                            cb(null, rows);
+                        })
+                        .error(cb);
+                },
+                function (cb) {
+                    request(app)
+                        .post('/ip/next').send({net: '10.5.1.0/30'}).set('Accept', 'text/plain')
+                        .expect(/^nothing left$/)
+                        .expect(500, cb);
+                }
+            ],
+            function (err, results) {
+                done(err);
+            });
     });
 
     it('can drop blocked ips', function (done) {
@@ -124,5 +168,11 @@ describe('the IP blocking API', function () {
             .expect(400, done);
     });
 
+    it('will complain if net argument is malformed', function (done) {
+        request(app)
+            .get('/ip').set('Accept', 'text/plain').send({net: '10..1.6/39'})
+            .expect(/ Invalid CIDR string/)
+            .expect(400, done);
+    });
 
 });

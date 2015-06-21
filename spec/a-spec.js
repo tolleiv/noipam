@@ -3,4 +3,4 @@ describe('the testframework', function () {
         expect(true).toBe(true);
         done()
     })
-})
+});
