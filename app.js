@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var routes_idx = require('./routes/index');
 var routes_ip = require('./routes/ip');
 var routes_net = require('./routes/net');
+var routes_connection = require('./routes/connection');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(function (req, res, next) {
 app.use('/', routes_idx);
 app.use('/ip', routes_ip);
 app.use('/net', routes_net);
+app.use('/connection', routes_connection);
 
 
 // catch 404 and forward to error handler

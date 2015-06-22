@@ -13,6 +13,10 @@ module.exports = function (sequelize, DataTypes) {
             }
         }
     });
+
+    Address.belongsToMany(Address, {as: 'Connected', through: 'AddressConnections'});
+
+
     Address.beforeCreate(function (address, options, fn) {
         address.value_int = ipCalculator.toDecimal(address.value);
         fn(null, address)
