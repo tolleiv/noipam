@@ -64,7 +64,7 @@ router.get('/remaining/:net/:suffix', validate_net, function (req, res) {
  * @apiError (Error 500) {String} err Error string
  * */
 router.post('/next/:net/:suffix', validate_net, function (req, res) {
-    return models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
+    models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
         remainingWithinNet(req.params.net, t, function (remaining) {
             if (remaining.length == 0) {
                 t.rollback();
