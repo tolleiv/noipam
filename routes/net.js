@@ -66,7 +66,7 @@ router.post('/next/:net/:suffix', validate_net, function (req, res) {
             } else {
                 models.Address.create(remaining[0], {transaction: t}).then(function () {
                     t.commit();
-                    res.send(remaining[0].value);
+                    res.status(302).set('Location','/ip/' + remaining[0].value).send(remaining[0].value);
                 }).error(function () {
                     t.rollback();
                     res.status(500).send('failure');

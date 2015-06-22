@@ -71,13 +71,13 @@ describe('the subnet API', function () {
                     request(app)
                         .post('/net/next/10.4.1.0/29')
                         .expect(/^10.4.1.3$/)
-                        .expect(200, cb);
+                        .expect(302, cb);
                 },
                 function (cb) {
                     request(app)
                         .post('/net/next/10.4.1.0/29')
                         .expect(/^10.4.1.4$/)
-                        .expect(200, cb);
+                        .expect(302, cb);
                 }
             ],
             function (err, results) {
