@@ -14,12 +14,14 @@ router.get('/:ip', function (req, res) {
     });
 });
 
-function fetchSourceTargetAddress(req, res, actionCallback) {
+function fetchSourceTargetAddress(req, res, t, actionCallback) {
     async.waterfall([
             function (cb) {
                 if (!check_ip_v4(req.params.ip)) {
+                    t.rollback();
                     res.status(400).send('source address invalid');
                 } else if (!check_ip_v4(req.params.target)) {
+                    t.rollback();
                     res.status(400).send('target address invalid');
                 } else {
                     cb(null)
@@ -27,20 +29,22 @@ function fetchSourceTargetAddress(req, res, actionCallback) {
             },
             function (cb) {
                 models.Address
-                    .find({where: {value: req.params.ip}})
+                    .find({where: {value: req.params.ip}, transaction: t})
                     .then(cb.bind(null, null))
                     .error(cb)
             },
             function (from, cb) {
                 models.Address
-                    .find({where: {value: req.params.target}})
+                    .find({where: {value: req.params.target}, transaction: t})
                     .then(cb.bind(null, null, from))
                     .error(cb)
             },
             function (from, to, cb) {
                 if (!from) {
+                    t.rollback();
                     res.status(404).send('source not found');
                 } else if (!to) {
+                    t.rollback();
                     res.status(404).send('target not found');
                 } else {
                     cb(null, from, to);
@@ -48,26 +52,32 @@ function fetchSourceTargetAddress(req, res, actionCallback) {
             },
             actionCallback,
             function (result, cb) {
+                t.commit();
                 res.send('success');
             }
         ],
         function (err, results) {
+            t.rollback();
             res.status(500).send('failure');
         });
 }
 
 router.put('/:ip/to/:target', function (req, res) {
-    fetchSourceTargetAddress(req, res, function (from, to, cb) {
-        from.addConnected(to)
-            .then(cb.bind(null, null))
-            .error(cb)
+    models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
+        fetchSourceTargetAddress(req, res, t, function (from, to, cb) {
+            from.addConnected(to, {transaction: t})
+                .then(cb.bind(null, null))
+                .error(cb);
+        });
     });
 });
 router.delete('/:ip/to/:target', function (req, res) {
-    fetchSourceTargetAddress(req, res, function (from, to, cb) {
-        from.removeConnected(to)
-            .then(cb.bind(null, null))
-            .error(cb)
+    models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
+        fetchSourceTargetAddress(req, res, t, function (from, to, cb) {
+            from.removeConnected(to, {transaction: t})
+                .then(cb.bind(null, null))
+                .error(cb);
+        });
     });
 });
 
