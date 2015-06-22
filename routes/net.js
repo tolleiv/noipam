@@ -16,7 +16,10 @@ var router = express.Router();
  * */
 router.get('/used/:net/:suffix', validate_net, function (req, res) {
     blockedWithinNet(req.params.net, null, function (rows) {
-        res.render('ip_list', {rows: rows});
+        res.render('ip_list', {
+            title: 'Blocks IPs within ' + req.params.ip + '/' + req.params.suffix,
+            rows: rows
+        });
     });
 });
 
@@ -27,8 +30,8 @@ router.get('/used/:net/:suffix', validate_net, function (req, res) {
  * @apiSuccess {String} ips List of used IPs delimited by newline
  * */
 router.get('/used', function (req, res) {
-    models.Address.findAll({order:[['value_int', 'ASC']]}).then(function (rows) {
-        res.render('ip_list', {rows: rows});
+    models.Address.findAll({order: [['value_int', 'ASC']]}).then(function (rows) {
+        res.render('ip_list', {title: 'Blocks IPs', rows: rows});
     });
 });
 
@@ -43,7 +46,10 @@ router.get('/used', function (req, res) {
  * */
 router.get('/remaining/:net/:suffix', validate_net, function (req, res) {
     remainingWithinNet(req.params.net, null, function (remaining) {
-        res.render('ip_list', {rows: remaining});
+        res.render('ip_list', {
+            title: 'Available IPs within ' + req.params.ip + '/' + req.params.suffix,
+            rows: remaining
+        });
     });
 });
 
@@ -66,7 +72,7 @@ router.post('/next/:net/:suffix', validate_net, function (req, res) {
             } else {
                 models.Address.create(remaining[0], {transaction: t}).then(function () {
                     t.commit();
-                    res.status(302).set('Location','/ip/' + remaining[0].value).send(remaining[0].value);
+                    res.status(302).set('Location', '/ip/' + remaining[0].value).send(remaining[0].value);
                 }).error(function () {
                     t.rollback();
                     res.status(500).send('failure');
