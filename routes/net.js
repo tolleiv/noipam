@@ -3,6 +3,7 @@ var models = require('../models');
 var validate_net = require('../lib/ip-validation').validate_net;
 var blockedWithinNet = require('../lib/ip-blocking').blockedWithinNet;
 var remainingWithinNet = require('../lib/ip-blocking').remainingWithinNet;
+var async = require('async');
 var router = express.Router();
 
 /**
@@ -70,7 +71,9 @@ router.post('/next/:net/:suffix', validate_net, function (req, res) {
                 t.rollback();
                 res.status(500).send('nothing left');
             } else {
-                models.Address.create(remaining[0], {transaction: t}).then(function () {
+                var addr = remaining[0];
+                addr.comment = req.body.comment;
+                models.Address.create(addr, {transaction: t}).then(function () {
                     t.commit();
                     res.status(302).set('Location', '/ip/' + remaining[0].value).send(remaining[0].value);
                 }).error(function () {
@@ -79,6 +82,42 @@ router.post('/next/:net/:suffix', validate_net, function (req, res) {
                 });
             }
         });
+    });
+});
+
+/**
+ * @api {get} net/connected/:net/:suffix List IPs connected to IPs from the subnet
+ * @apiGroup Subnet
+ *
+ * @apiParam {IPv4} net the subnet to check
+ * @apiParam {Suffix} suffix the suffix for the net
+ *
+ * @apiSuccess {String} ips List of connected IPs delimited by newline
+ * */
+router.get('/connected/:net/:suffix', validate_net, function (req, res) {
+    blockedWithinNet(req.params.net, null, function (rows) {
+        var connectedRows = [];
+        async.concat(rows,
+            function (row, callback) {
+                row.getConnected().then(function (connected) {
+                    var conn = [];
+                    for (var i = 0; i < connected.length; i++) {
+                        conn.push({
+                            from: row,
+                            to: connected[i]
+                        })
+                    }
+
+                    callback(null, conn)
+                });
+            },
+            function (err, results) {
+                res.render('ip_connection', {
+                    title: 'IPs connected to ' + req.params.ip + '/' + req.params.suffix,
+                    rows: results
+                });
+            });
+
     });
 });
 

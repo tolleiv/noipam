@@ -8,8 +8,15 @@ router.get('/:ip', function (req, res) {
     models.Address.find({
         where: {value: req.params.ip}
     }).then(function (address) {
-        address.getConnected().then(function (rows) {
-            res.render('ip_list', {title: 'Connection to ' + req.params.ip, rows: rows});
+        address.getConnected().then(function (connected) {
+            var conn = [];
+            for (var i = 0; i < connected.length; i++) {
+                conn.push({
+                    from: address,
+                    to: connected[i]
+                })
+            }
+            res.render('ip_connection', {title: 'Connection to ' + req.params.ip, rows: conn});
         });
     });
 });
@@ -65,7 +72,7 @@ function fetchSourceTargetAddress(req, res, t, actionCallback) {
 router.put('/:ip/to/:target', function (req, res) {
     models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
         fetchSourceTargetAddress(req, res, t, function (from, to, cb) {
-            from.addConnected(to, {transaction: t})
+            from.addConnected(to, {transaction: t, comment: req.body.comment})
                 .then(cb.bind(null, null))
                 .error(cb);
         });

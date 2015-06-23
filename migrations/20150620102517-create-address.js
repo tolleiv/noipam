@@ -12,7 +12,7 @@ module.exports = {
                 type: Sequelize.STRING
             },
             comment: {
-                type: Sequelize.STRING
+                type: Sequelize.TEXT
             },
             value_int: {
                 type: Sequelize.INTEGER

@@ -4,7 +4,7 @@ var ipCalculator = require('ip-subnet-calculator');
 module.exports = function (sequelize, DataTypes) {
     var Address = sequelize.define('Address', {
         value: DataTypes.STRING,
-        comment: DataTypes.STRING,
+        comment: DataTypes.TEXT,
         value_int: DataTypes.INTEGER
     }, {
         classMethods: {
@@ -16,7 +16,6 @@ module.exports = function (sequelize, DataTypes) {
 
     Address.belongsToMany(Address, {as: 'Connected', through: 'AddressConnections'});
 
-
     Address.beforeCreate(function (address, options, fn) {
         address.value_int = ipCalculator.toDecimal(address.value);
         fn(null, address)
@@ -27,6 +26,6 @@ module.exports = function (sequelize, DataTypes) {
             return address;
         });
         fn(null, addresses)
-    })
+    });
     return Address;
 };
