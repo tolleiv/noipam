@@ -1,5 +1,5 @@
 
-# NOIPAM no IP address management tool
+# NoIPAM -  No(t really a) IP address management tool
 
 image:https://travis-ci.org/tolleiv/noipam.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/noipam"]
 
