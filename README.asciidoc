@@ -1,9 +1,26 @@
 
-# NOIPAM ... no IP address management tool
+# NOIPAM no IP address management tool
 
 image:https://travis-ci.org/tolleiv/noipam.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/noipam"]
 
 This tool enabled to keep track of used IP addresses and maintain relations between addresses. It is not used to manage IP pools, has no IPv6 support yet, has no statistics module or anything too fancy. Its focus lays on the REST API, the minimal Bootstrap WebUI is just meant to get better insights.
+
+## Why?
+
+When auto provisioning servers, DHCP isn't the right choice and manual association isn't nice either.
+Therefore this tool provides a service with a nice API to help automating provision processes.
+
+## Installation
+
+Make sure you have node and npm available, then just:
+
+     $ git clone https://github.com/tolleiv/noipam.git
+     $ npm install
+     $ npm start
+
+Running the tests
+
+     $ npm test
 
 ## Usage
 
@@ -26,14 +43,22 @@ List the remaining or used IPs for a subnet
     $ curl -X GET     -s http://_service_/net/remaining/10.20.70.0/24
     $ curl -X GET     -s http://_service_/net/used/10.20.70.0/24
 
+List all connections for one IP address
+
+    $ curl -X GET     -s http://_service_/connection/10.9.1.3
+
+Add a "connection" relation between two addresses
+
+    $ curl -X PUT     -s http://_service_/connection/10.9.1.3/to/2.2.2
+    $ curl -X DELETE     -s http://_service_/connection/10.9.1.3/to/2.2.2
+
+## Usecases
+
+...
+
 ## WebUI
 
 Ever API endpoint which is available via GET can also be used with the "?pretty=html" query param - which then shows a nicer view for human users.
-
-## Why?
-
-When auto provisioning servers, DHCP isn't the right choice and manual association isn't nice either.
-Therefore this tool provides a service with a nice API to help automating provision processes.
 
 ## Not yet included
 
