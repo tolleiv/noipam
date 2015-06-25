@@ -19,6 +19,7 @@ router.get('/used/:net/:suffix', validate_net, function (req, res) {
     blockedWithinNet(req.params.net, null, function (rows) {
         res.render('ip_list', {
             title: 'Blocks IPs within ' + req.params.ip + '/' + req.params.suffix,
+            amount: rows.length,
             rows: rows
         });
     });
@@ -31,8 +32,12 @@ router.get('/used/:net/:suffix', validate_net, function (req, res) {
  * @apiSuccess {String} ips List of used IPs delimited by newline
  * */
 router.get('/used', function (req, res) {
-    models.Address.findAll({order: [['value_int', 'ASC']]}).then(function (rows) {
-        res.render('ip_list', {title: 'Blocks IPs', rows: rows});
+    models.Address.findAll({order: [['valueInt', 'ASC']]}).then(function (rows) {
+        res.render('ip_list', {
+            title: 'Blocks IPs',
+            amount: rows.length,
+            rows: rows
+        });
     });
 });
 
@@ -49,6 +54,7 @@ router.get('/remaining/:net/:suffix', validate_net, function (req, res) {
     remainingWithinNet(req.params.net, null, function (remaining) {
         res.render('ip_list', {
             title: 'Available IPs within ' + req.params.ip + '/' + req.params.suffix,
+            amount: remaining.length,
             rows: remaining
         });
     });
@@ -114,6 +120,7 @@ router.get('/connected/:net/:suffix', validate_net, function (req, res) {
             function (err, results) {
                 res.render('ip_connection', {
                     title: 'IPs connected to ' + req.params.ip + '/' + req.params.suffix,
+                    amount: results.length,
                     rows: results
                 });
             });

@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var timeplan = require('timeplan');
 var cookieParser = require('cookie-parser');
 var swig = require('swig');
 var bodyParser = require('body-parser');
@@ -39,7 +40,6 @@ app.use('/ip', routes_ip);
 app.use('/net', routes_net);
 app.use('/connection', routes_connection);
 
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -70,5 +70,17 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+
+if (app.get('env') !== 'test') {
+    timeplan.delayed({
+        period: 's',
+        task: function () {
+            timeplan.repeat({
+                period: '1s',
+                task: require('./lib/timeplan').updateReverseDns
+            })
+        }
+    });
+}
 
 module.exports = app;

@@ -14,14 +14,21 @@ module.exports = {
             comment: {
                 type: Sequelize.TEXT
             },
-            value_int: {
+            valueInt: {
                 type: Sequelize.INTEGER
+            },
+            dns: {
+                type: Sequelize.TEXT
             },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
             },
             updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE
+            },
+            dnsUpdatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
             }

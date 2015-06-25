@@ -14,12 +14,13 @@
     "debug": "~2.2.0",
     "express": "~4.12.4",
     "ip-subnet-calculator": "^1.0.2",
-    "swig": "*",
     "morgan": "~1.5.3",
     "sequelize": "^3.2.0",
     "sequelize-cli": "^1.7.0",
     "serve-favicon": "~2.2.1",
-    "sqlite3": "^3.0.8"
+    "sqlite3": "^3.0.8",
+    "swig": "*",
+    "timeplan": "^1.0.0"
   },
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
@@ -35,7 +36,7 @@
   },
   "apidoc": {
     "title": "Custom apiDoc browser title",
-    "url" : "https://localhost:3000/"
+    "url": "https://localhost:3000/"
   },
   "author": "Tolleiv Nietsch <tolleiv.nietsch@aoe.com>",
   "license": "MIT"

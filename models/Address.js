@@ -5,7 +5,9 @@ module.exports = function (sequelize, DataTypes) {
     var Address = sequelize.define('Address', {
         value: DataTypes.STRING,
         comment: DataTypes.TEXT,
-        value_int: DataTypes.INTEGER
+        dns: DataTypes.TEXT,
+        valueInt: DataTypes.INTEGER,
+        dnsUpdatedAt: DataTypes.DATE
     }, {
         classMethods: {
             associate: function (models) {
@@ -17,12 +19,12 @@ module.exports = function (sequelize, DataTypes) {
     Address.belongsToMany(Address, {as: 'Connected', through: 'AddressConnections'});
 
     Address.beforeCreate(function (address, options, fn) {
-        address.value_int = ipCalculator.toDecimal(address.value);
+        address.valueInt = ipCalculator.toDecimal(address.value);
         fn(null, address)
     });
     Address.beforeBulkCreate(function (addresses, options, fn) {
         addresses = addresses.map(function (address) {
-            address.value_int = ipCalculator.toDecimal(address.value);
+            address.valueInt = ipCalculator.toDecimal(address.value);
             return address;
         });
         fn(null, addresses)

@@ -1,14 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<h2>{{ title }}</h2>
+<h2>{{ title }} ({{ amount }})</h2>
 {% endblock %}
 {% block content %}
 <table class="table table-striped">
-    <thead><tr><th>IP</th><th>Comment</th></tr></thead>
+    <thead><tr>
+        <th data-sort="string">IP</th>
+        <th data-sort="string">Comment</th>
+        <th data-sort="string">Reverse DNS</th></tr>
+    </thead>
     <tbody>
     {% for row in rows %}
-    <tr><td>{{ row.value }}</td><td>{{ row.comment }}</td></tr>
+    <tr><td>{{ row.value }}</td><td>{{ row.comment }}</td><td>{{ row.dns }}</td></tr>
     {% endfor %}
     </tbody>
 </table>

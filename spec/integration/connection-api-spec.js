@@ -27,7 +27,7 @@ describe('the connection API', function () {
         async.waterfall([
                 function (cb) {
                     models.Address
-                        .findAll({order: [['value_int', 'ASC']]})
+                        .findAll({order: [['valueInt', 'ASC']]})
                         .then(cb.bind(null, null))
                         .error(cb);
                 },
@@ -103,7 +103,7 @@ describe('the connection API', function () {
         async.waterfall([
                 function (cb) {
                     models.Address
-                        .findAll({order: [['value_int', 'ASC']]})
+                        .findAll({order: [['valueInt', 'ASC']]})
                         .then(cb.bind(null, null))
                         .error(cb);
                 },
