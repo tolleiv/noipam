@@ -3,7 +3,7 @@
 
 image:https://travis-ci.org/tolleiv/noipam.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/noipam"]
 
-This tool enabled to keep track of used IP addresses and maintain relations between addresses. It is not used to manage IP pools, has no IPv6 support yet, has no statistics module or anything too fancy. Its focus lays on the REST API, the minimal Bootstrap WebUI is just meant to get better insights.
+This tool enables to keep track of used IP addresses and maintain relations between addresses. It is not used to manage IP pools, has no IPv6 support yet, has no statistics module or anything too fancy. Its focus lies on the REST API, the minimal Bootstrap WebUI is just meant to get better insights.
 
 ## Why?
 
@@ -24,7 +24,7 @@ Running the tests
 
 ## Usage
 
-Check if IP is used
+Check if IP is in use:
 
     $ curl -X GET     -s http://localhost:3000/ip/10.20.70.11
     --> free | used
