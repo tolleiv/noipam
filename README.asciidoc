@@ -65,3 +65,7 @@ Ever API endpoint which is available via GET can also be used with the "?pretty=
  * IPv6
  * Bulk imports via API (just use a Bash script=
  * Blocking / unblocking with the WebUI
+
+## License
+
+This is free and unencumbered software released into the public domain. See the UNLICENSE file or http://unlicense.org/ for more details.
