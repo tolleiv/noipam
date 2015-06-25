@@ -26,31 +26,31 @@ Running the tests
 
 Check if IP is used
 
-    $ curl -X GET     -s http://_service_/ip/10.20.70.11
+    $ curl -X GET     -s http://localhost:3000/ip/10.20.70.11
     --> free | used
 
 Mark IP as used/unused
 
-    $ curl -X PUT     -s http://_service_/ip/10.20.70.11
-    $ curl -X DELETE  -s http://_service_/ip/10.20.70.11
+    $ curl -X PUT     -s http://localhost:3000/ip/10.20.70.11
+    $ curl -X DELETE  -s http://localhost:3000/ip/10.20.70.11
 
 Get an available IP from a subnet
 
-    $ curl -X POST    -s http://_service_/net/next/10.20.70.0/24
+    $ curl -X POST    -s http://localhost:3000/net/next/10.20.70.0/24
 
 List the remaining or used IPs for a subnet
 
-    $ curl -X GET     -s http://_service_/net/remaining/10.20.70.0/24
-    $ curl -X GET     -s http://_service_/net/used/10.20.70.0/24
+    $ curl -X GET     -s http://localhost:3000/net/remaining/10.20.70.0/24
+    $ curl -X GET     -s http://localhost:3000/net/used/10.20.70.0/24
 
 List all connections for one IP address
 
-    $ curl -X GET     -s http://_service_/connection/10.9.1.3
+    $ curl -X GET     -s http://localhost:3000/connection/10.9.1.3
 
 Add a "connection" relation between two addresses
 
-    $ curl -X PUT     -s http://_service_/connection/10.9.1.3/to/2.2.2
-    $ curl -X DELETE     -s http://_service_/connection/10.9.1.3/to/2.2.2
+    $ curl -X PUT     -s http://localhost:3000/connection/10.9.1.3/to/2.2.2
+    $ curl -X DELETE  -s http://localhost:3000/connection/10.9.1.3/to/2.2.2
 
 ## Usecases
 
