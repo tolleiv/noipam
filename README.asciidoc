@@ -3,12 +3,12 @@
 
 image:https://travis-ci.org/tolleiv/noipam.svg?branch=master["Build Status", link="https://travis-ci.org/tolleiv/noipam"]
 
-This tool enables to keep track of used IP addresses and maintain relations between addresses. It is not used to manage IP pools, has no IPv6 support yet, has no statistics module or anything too fancy. Its focus lies on the REST API, the minimal Bootstrap WebUI is just meant to get better insights.
+This tool enables to keep track of used IP addresses and maintain relations between addresses. It is not used to manage IP pools, has no IPv6 support yet, has no user management, has no statistics module or anything too fancy. Its focus lies on the REST API to support automation, the minimal Bootstrap WebUI is just meant to get better insights.
 
 ## Why?
 
 When auto provisioning servers, DHCP isn't the right choice and manual association isn't nice either.
-Therefore this tool provides a service with a nice API to help automating provision processes.
+Therefore this tool provides a service with a nice API to help automating provision processes. Our surrounding tools already have IP pools preconfigured just the actual IP blocking was not available as a service. That's why this ended up as a very slim tool for just that purpose.
 
 ## Installation
 
@@ -60,11 +60,12 @@ Add a "connection" relation between two addresses
 
 Ever API endpoint which is available via GET can also be used with the "?pretty=html" query param - which then shows a nicer view for human users.
 
-## Not yet included
+## Not (yet) included
 
  * IPv6
  * Bulk imports via API (just use a Bash script=
  * Blocking / unblocking with the WebUI
+ * IP Pool handling
 
 ## License
 
