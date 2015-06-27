@@ -52,7 +52,17 @@ router.route('/:ip')
                     res.status(500).send('failure');
                 });
             } else {
-                res.send('used');
+
+                if (address.comment != req.body.comment) {
+                    address.comment = req.body.comment;
+                    address.save().then(function () {
+                        res.send('used');
+                    }).error(function () {
+                        res.status(500).send('failure');
+                    });
+                } else {
+                    res.send('used');
+                }
             }
         });
     })

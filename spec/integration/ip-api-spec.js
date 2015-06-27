@@ -1,6 +1,7 @@
 var app = require('../../app');
 var Bluebird = require('bluebird');
 var request = require('supertest');
+var async = require('async');
 
 describe('the ip API', function () {
     beforeEach(function (done) {
@@ -43,6 +44,30 @@ describe('the ip API', function () {
             .expect(200, done);
     });
 
+    it('can comment on ip blocks', function (done) {
+        var models = this.models;
+        async.series([
+                function (cb) {
+                    request(app)
+                        .put('/ip/10.1.1.3').send('comment=my+comment')
+                        .expect(/^success$/)
+                        .expect(200, cb);
+                },
+                function (cb) {
+                    models.Address
+                        .findOne({where: {value: '10.1.1.3'}})
+                        .then(function (row) {
+                            expect(row.comment).toBe('my comment');
+                            cb(null, row);
+                        })
+                        .error(cb);
+                }
+            ],
+            function (err, results) {
+                done(err);
+            });
+    });
+
     it("can't block already blocked ips", function (done) {
         this.models.Address.create({value: '10.1.1.4'}).then(function () {
             request(app)
@@ -50,6 +75,37 @@ describe('the ip API', function () {
                 .expect(/^used/)
                 .expect(200, done);
         });
+    });
+
+    it('can update the comment of already blocked ips', function (done) {
+        var models = this.models;
+        async.series([
+                function (cb) {
+                    models.Address.create({value: '10.1.1.4'})
+                        .then(function (rows) {
+                            cb(null, rows);
+                        })
+                        .error(cb);
+                },
+                function (cb) {
+                    request(app)
+                        .put('/ip/10.1.1.4').send('comment=a+comment')
+                        .expect(/^used/)
+                        .expect(200, cb);
+                },
+                function (cb) {
+                    models.Address
+                        .findOne({where: {value: '10.1.1.4'}})
+                        .then(function (row) {
+                            expect(row.comment).toBe('a comment');
+                            cb(null, row);
+                        })
+                        .error(cb);
+                }
+            ],
+            function (err, results) {
+                done(err);
+            });
     });
 
     it('can drop blocked ips', function (done) {
