@@ -1,0 +1,27 @@
+# noipam - NoIPAM IP management
+#
+# IP Management without pool management ...
+#  just IPs and IP<->IP relations
+#
+description "NoIPAM IP management"
+author      "Tolleiv Nietsch"
+
+start on (local-filesystems and net-device-up IFACE!=lo)
+
+setuid _noipam
+setgid _noipam
+
+respawn
+respawn limit 10 5
+
+chdir /usr/share/noipam
+
+pre-start script
+    NODE_BIN=$(which nodejs || which node)
+    [ -n $NODE_BIN ] || { stop; exit 0; }
+end script
+
+script
+    NODE_BIN=$(which nodejs || which node)
+    exec $NODE_BIN app.js /etc/noipam/config.json
+end script

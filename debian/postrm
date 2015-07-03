@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = purge ]; then
+
+  update-rc.d noipam remove >/dev/null || true
+
+  rm -rf /var/run/noipam
+
+  if dpkg-statoverride --list /var/run/noipam >/dev/null 2>&1; then
+    dpkg-statoverride --remove /var/run/noipam
+  fi
+
+  deluser --system --quiet _noipam || true
+  delgroup --system --quiet _noipam || true
+fi

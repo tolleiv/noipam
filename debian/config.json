@@ -1,0 +1,7 @@
+{
+    "production": {
+        "dialect": "sqlite",
+        "storage": "./db.production.sqlite",
+        "logging": false
+    }
+}

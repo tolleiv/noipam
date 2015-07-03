@@ -1,0 +1,13 @@
+Source: noipam
+Section: devel
+Priority: optional
+Maintainer: Tolleiv Nietsch <noipam@tolleiv.de>
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8.0.0)
+
+Package: noipam
+Architecture: all
+Depends: nodejs (>= 0.10), adduser
+Description: NoIPAM IP management
+  IP Management without pool management ...
+  just IPs and IP<->IP relations

@@ -1,0 +1,12 @@
+app.js  /usr/share/noipam
+package.json /usr/share/noipam
+bin/www /usr/share/noipam/bin/www
+lib/*.js /usr/share/noipam/lib
+migrations/*.js  /usr/share/noipam/migrations
+models/*.js  /usr/share/noipam/models
+public/*  /usr/share/noipam/public
+routers/*.js  /usr/share/noipam/routers
+spec/*.js  /usr/share/noipam/spec
+views/*  /usr/share/noipam/views
+
+debian/config.json	/etc/noipam
