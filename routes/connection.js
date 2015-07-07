@@ -4,6 +4,15 @@ var async = require('async');
 var router = express.Router();
 var check_ip_v4 = require('../lib/ip-validation').check_ip_v4;
 
+
+/**
+ * @api {get} connection/:ip List all addresses connected to the :ip
+ * @apiGroup Connection
+ *
+ * @apiParam {IPv4} ip the address which should be used for the lookup
+ *
+ * @apiSuccess {String} HTTP_body List of connected IPs delimited by newline
+ * */
 router.get('/:ip', function (req, res) {
     models.Address.find({
         where: {value: req.params.ip}
@@ -69,6 +78,16 @@ function fetchSourceTargetAddress(req, res, t, actionCallback) {
         });
 }
 
+
+/**
+ * @api {put} connection/:ip/to/:target Add a connection between two addresses
+ * @apiGroup Connection
+ *
+ * @apiParam {IPv4} ip the source address
+ * @apiParam {IPv4} ip the target address
+ * @apiSuccess (Status 200) {String} HTTP_body "success"
+ * @apiError (Status 404) {String} HTTP_body "not found"
+ * */
 router.put('/:ip/to/:target', function (req, res) {
     models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
         fetchSourceTargetAddress(req, res, t, function (from, to, cb) {
@@ -78,6 +97,16 @@ router.put('/:ip/to/:target', function (req, res) {
         });
     });
 });
+
+/**
+ * @api {delete} connection/:ip/to/:target Delete a connection between two addresses
+ * @apiGroup Connection
+ *
+ * @apiParam {IPv4} ip the source address
+ * @apiParam {IPv4} ip the target address
+ * @apiSuccess (Status 200) {String} HTTP_body "success"
+ * @apiError (Status 404) {String} HTTP_body "not found"
+ * */
 router.delete('/:ip/to/:target', function (req, res) {
     models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
         fetchSourceTargetAddress(req, res, t, function (from, to, cb) {

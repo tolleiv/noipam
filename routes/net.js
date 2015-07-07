@@ -13,7 +13,7 @@ var router = express.Router();
  * @apiParam {IPv4} net the subnet to check
  * @apiParam {Suffix} suffix the suffix for the net
  *
- * @apiSuccess {String} ips List of used IPs delimited by newline
+ * @apiSuccess {String} HTTP_body List of used IPs delimited by newline
  * */
 router.get('/used/:net/:suffix', validate_net, function (req, res) {
     blockedWithinNet(req.params.net, null, function (rows) {
@@ -29,7 +29,7 @@ router.get('/used/:net/:suffix', validate_net, function (req, res) {
  * @api {get} net/used List all IPs blocked
  * @apiGroup Subnet
  *
- * @apiSuccess {String} ips List of used IPs delimited by newline
+ * @apiSuccess {String} HTTP_body List of used IPs delimited by newline
  * */
 router.get('/used', function (req, res) {
     models.Address.findAll({order: [['valueInt', 'ASC']]}).then(function (rows) {
@@ -48,7 +48,7 @@ router.get('/used', function (req, res) {
  * @apiParam {IPv4} net the subnet to check
  * @apiParam {Suffix} suffix the suffix for the net
  *
- * @apiSuccess {String} ips List of available IPs delimited by newline
+ * @apiSuccess {String} HTTP_body List of available IPs delimited by newline
  * */
 router.get('/remaining/:net/:suffix', validate_net, function (req, res) {
     remainingWithinNet(req.params.net, null, function (remaining) {
@@ -61,14 +61,14 @@ router.get('/remaining/:net/:suffix', validate_net, function (req, res) {
 });
 
 /**
- * @api {post} net/next/:net/:suffix block next IP in subnet
+ * @api {post} net/next/:net/:suffix Block next IP in subnet
  * @apiGroup Subnet
  *
  * @apiParam {IPv4} net the subnet to check
  * @apiParam {Suffix} suffix the suffix for the net
  *
- * @apiSuccess {IPv4} ip The successfully blocked IP
- * @apiError (Error 500) {String} err Error string
+ * @apiSuccess (Status 302) {IPv4} HTTP_body The successfully blocked IP
+ * @apiError (Error 500) {String} HTTP_body Error string
  * */
 router.post('/next/:net/:suffix', validate_net, function (req, res) {
     models.sequelize.transaction({isolationLevel: 'SERIALIZABLE'}).then(function (t) {
@@ -98,7 +98,7 @@ router.post('/next/:net/:suffix', validate_net, function (req, res) {
  * @apiParam {IPv4} net the subnet to check
  * @apiParam {Suffix} suffix the suffix for the net
  *
- * @apiSuccess {String} ips List of connected IPs delimited by newline
+ * @apiSuccess {String} HTTP_body List of connected IPs delimited by newline
  * */
 router.get('/connected/:net/:suffix', validate_net, function (req, res) {
     blockedWithinNet(req.params.net, null, function (rows) {

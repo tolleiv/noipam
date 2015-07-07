@@ -19,6 +19,8 @@ router.route('/:ip')
  * @apiGroup IP
  *
  * @apiParam {IPv4} ip the address to check
+ * @apiSuccess (Status 200) {String} HTTP_body "used"
+ * @apiError (Status 404) {String} HTTP_body "free"
  * */
     .get(function (req, res) {
         models.Address.find({
@@ -33,10 +35,13 @@ router.route('/:ip')
     })
 
 /**
- * @api {put} ip/:ip Create blocked IP
+ * @api {put} ip/:ip Create / Update a blocked IP
  * @apiGroup IP
  *
  * @apiParam {IPv4} ip the address to block
+ * @apiParam {String} comment
+ * @apiSuccess (Status 200) {String} HTTP_body "success"
+ * @apiError (Status 500) {String} HTTP_body "failure"
  * */
     .put(function (req, res) {
         models.Address.find({
@@ -72,6 +77,8 @@ router.route('/:ip')
  * @apiGroup IP
  *
  * @apiParam {IPv4} ip the address to unblock
+ * @apiSuccess (Status 200) {String} HTTP_body "success"
+ * @apiError (Status 404) {String} HTTP_body "not found"
  * */
     .delete(function (req, res) {
         models.Address.find({

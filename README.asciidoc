@@ -47,6 +47,10 @@ List all connections for one IP address
 
     $ curl -X GET     -s http://localhost:3000/connection/10.9.1.3
 
+List all connections for a network
+
+    $ curl -X GET     -s http://localhost:3000/net/connected/10.9.1.0/24
+
 Add a "connection" relation between two addresses
 
     $ curl -X PUT     -s http://localhost:3000/connection/10.9.1.3/to/2.2.2
