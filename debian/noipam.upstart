@@ -23,5 +23,5 @@ end script
 
 script
     NODE_BIN=$(which nodejs || which node)
-    exec $NODE_BIN app.js /etc/noipam/config.json
+    exec $NODE_BIN app.js /etc/noipam/config.json > /var/log/noipam/app.log 2> /var/log/noipam/err.log
 end script
