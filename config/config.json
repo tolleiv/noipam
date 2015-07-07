@@ -1,12 +1,12 @@
 {
   "development": {
     "dialect": "sqlite",
-    "storage": "./db.development.sqlite",
+    "storage": "./db/db.development.sqlite",
     "logging": false
   },
   "test": {
     "dialect": "sqlite",
-    "storage": "./db.test.sqlite",
+    "storage": "./db/db.test.sqlite",
     "logging": true
   }
 }
