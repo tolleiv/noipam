@@ -2,5 +2,10 @@
 
 {% block content %}
 <p>See full <a href="/apidoc/index.html">APIdoc documentation</a></p>
-<p>All reserved IPs: <a href="/net/used?pretty=html">listing</a></p>
+<p>All reserved IPs:
+<ul>
+    <li><a href="/net/used?pretty=simple">listing (simple html)</a></li>
+    <li><a href="/net/used?pretty=html">listing (interactive html)</a></li>
+</ul>
+</p>
 {% endblock %}
