@@ -22,10 +22,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-    if (req.query.pretty && req.query.pretty == 'html') {
+    if (req.query.pretty && ['html'].indexOf(req.query.pretty) > -1) {
         app.engine('html', swig.renderFile);
         app.set('view engine', 'html');
-        app.set('views', path.join(__dirname, 'views/html'));
+        app.set('views', path.join(__dirname, 'views/interactive'));
+    } else if (req.query.pretty && ['simple'].indexOf(req.query.pretty) > -1) {
+        app.engine('html', swig.renderFile);
+        app.set('view engine', 'html');
+        app.set('views', path.join(__dirname, 'views/simple'));
     } else {
         app.engine('txt', swig.renderFile);
         app.set('view engine', 'txt');
