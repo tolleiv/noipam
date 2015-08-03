@@ -1,11 +1,46 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<p>See full <a href="/apidoc/index.html">APIdoc documentation</a></p>
-<p>All reserved IPs:
-<ul>
-    <li><a href="/net/used?pretty=simple">listing (simple html)</a></li>
-    <li><a href="/net/used?pretty=html">listing (interactive html)</a></li>
-</ul>
-</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Overview</h2>
+            <p>See full <a href="/apidoc/index.html">APIdoc documentation</a></p>
+
+            <p>All reserved IPs:
+            <ul>
+                <li><a href="/net/used?pretty=simple">listing (simple html)</a></li>
+                <li><a href="/net/used?pretty=html">listing (interactive html)</a></li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="col-md-6">
+
+            <h2>Example usage</h2>
+
+            <p>Check if IP is in use:</p>
+            <pre>curl -X GET    -s http://{{ base_uri }}/ip/10.20.70.11</pre>
+            <p>Mark IP as used/unused</p>
+<pre>
+curl -X PUT    -s http://{{ base_uri }}/ip/10.20.70.11
+curl -X DELETE -s http://{{ base_uri }}/ip/10.20.70.11
+</pre>
+            <p>Get an available IP from a subnet</p>
+            <pre>curl -X POST   -s http://{{ base_uri }}/net/next/10.20.70.0/24</pre>
+            <p>List the remaining or used IPs for a subnet</p>
+<pre>curl -X GET     -s http://{{ base_uri }}/net/remaining/10.20.70.0/24
+curl -X GET     -s http://{{ base_uri }}/net/used/10.20.70.0/24</pre>
+            <p>List all connections for one IP address</p>
+            <pre>curl -X GET    -s http://{{ base_uri }}/connection/10.9.1.3</pre>
+            <p>List all connections for a network</p>
+            <pre>curl -X GET    -s http://{{ base_uri }}/net/connected/10.9.1.0/24</pre>
+            <p>Add a "connection" relation between two addresses</p>
+<pre>curl -X PUT    -s http://{{ base_uri }}/connection/10.9.1.3/to/2.2.2
+curl -X DELETE -s http://{{ base_uri }}/connection/10.9.1.3/to/2.2.2</pre>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
