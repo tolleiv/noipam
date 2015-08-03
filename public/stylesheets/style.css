@@ -2,3 +2,8 @@
 .container h2 {
     margin-top: 0px;
 }
+
+.container .row footer {
+    margin-top: 20px;
+    font-size: smaller;
+}
