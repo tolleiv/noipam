@@ -43,6 +43,10 @@ List the remaining or used IPs for a subnet
     $ curl -X GET     -s http://localhost:3000/net/remaining/10.20.70.0/24
     $ curl -X GET     -s http://localhost:3000/net/used/10.20.70.0/24
 
+List all used IPs
+
+    $ curl -X GET     -s http://localhost:3000/net/used
+
 List all connections for one IP address
 
     $ curl -X GET     -s http://localhost:3000/connection/10.9.1.3
@@ -63,6 +67,9 @@ Ever API endpoint which is available via GET can also be used with the "?pretty=
 Right after the installation just open up `http://localhost:3000/?pretty=html` and you'll be able to start working with in.
 
 image:https://gist.github.com/tolleiv/9a864e498f3a50c47931/raw/homepage.png["NoIPAM index page"]
+
+Subnet listings can be shrinked down to single subnets as described above. The listings will look like this:
+
 image:https://gist.github.com/tolleiv/9a864e498f3a50c47931/raw/ip-address-listing.png["IP address listing"]
 
 ## Not (yet) included
