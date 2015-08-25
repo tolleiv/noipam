@@ -75,9 +75,8 @@ image:https://gist.github.com/tolleiv/9a864e498f3a50c47931/raw/ip-address-listin
 ## Not (yet) included
 
  * IPv6
- * Bulk imports via API (just use a Bash script=
- * Blocking / unblocking with the WebUI
- * IP Pool handling
+ * Bulk imports via API (just use a Bash script)
+ * [line-through]#IP Pool handling#
 
 ## License
 
