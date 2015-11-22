@@ -7,6 +7,5 @@
   "test": {
     "DB_URL": "sqlite://.",
     "DB_OPTIONS": { "storage" : ":memory:", "logging": true}
-
   }
 }

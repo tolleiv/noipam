@@ -6,7 +6,13 @@ var Sequelize = require('sequelize');
 var basename = path.basename(module.filename);
 var config = require(__dirname + '/../lib/config.js');
 
-var sequelize = new Sequelize(config.get('DB_URL'), config.get('DB_OPTIONS',  {}));
+var options = config.get('DB_OPTIONS',  {});
+
+if (typeof options === 'string') {
+    options = JSON.parse(options);
+}
+
+var sequelize = new Sequelize(config.get('DB_URL'), options);
 var db = {};
 
 fs

@@ -1,7 +1,8 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var log4js = require('log4js');
+var logger = log4js.getLogger();
 var timeplan = require('timeplan');
 var cookieParser = require('cookie-parser');
 var swig = require('swig');
@@ -15,11 +16,12 @@ var routes_connection = require('./routes/connection');
 var app = express();
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+app.use(log4js.connectLogger(logger, { level: 'auto' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(function (req, res, next) {
     if (req.query.pretty && ['html'].indexOf(req.query.pretty) > -1) {
