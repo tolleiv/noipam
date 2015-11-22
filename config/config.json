@@ -1,12 +1,12 @@
 {
   "development": {
-    "dialect": "sqlite",
-    "storage": "./db/db.development.sqlite",
-    "logging": false
+    "DB_URL": "sqlite://.",
+    "DB_OPTIONS": { "storage" : "./db/db.development.sqlite", "logging": false}
+
   },
   "test": {
-    "dialect": "sqlite",
-    "storage": "./db/db.test.sqlite",
-    "logging": true
+    "DB_URL": "sqlite://.",
+    "DB_OPTIONS": { "storage" : ":memory:", "logging": true}
+
   }
 }

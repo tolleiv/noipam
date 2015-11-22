@@ -4,9 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var Sequelize = require('sequelize');
 var basename = path.basename(module.filename);
-var env = process.env.NODE_ENV || 'development';
-var config = require(__dirname + '/../config/config.json')[env];
-var sequelize = new Sequelize(config.database, config.username, config.password, config);
+var config = require(__dirname + '/../lib/config.js');
+
+var sequelize = new Sequelize(config.get('DB_URL'), config.get('DB_OPTIONS',  {}));
 var db = {};
 
 fs
