@@ -2,6 +2,7 @@
   "name": "noipam",
   "version": "0.0.1",
   "private": true,
+  "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www",
     "test": "npm run lint && istanbul test jasmine-node -- --verbose --color --captureExceptions spec",
@@ -20,7 +21,8 @@
     "serve-favicon": "~2.2.1",
     "sqlite3": "^3.0.9",
     "swig": "*",
-    "timeplan": "^1.0.0"
+    "timeplan": "^1.0.0",
+    "async": "*",
   },
   "devDependencies": {
     "jasmine-node": ">= 0.0.1",
@@ -31,7 +33,6 @@
     "istanbul": "~0.2.9",
     "coveralls": "~2.10.0",
     "jscs": "*",
-    "async": "*",
     "apidoc": "*"
   },
   "apidoc": {
